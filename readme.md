@@ -45,3 +45,7 @@ Then, for runtime dependencies:
 For development time dependencies (not needed at runtime):
 
     npm install [dependencyName] --save-dev
+
+If you forget the scripts you can run with npm, just use:
+
+    npm run
