@@ -18,10 +18,6 @@ file. This can be done with a single command:
 
     npm install
 
-# How to run the webserver
-
-    npm run webserver
-
 # Compiling with Typescript & TSC
 
 We are using tsc (typescript compiler) to watch our typescript files and recompile them
@@ -29,6 +25,14 @@ to javascript files located in the "dist" folder whenever they change. The detai
 how the compiler is configured are located in the "tsconfig.json" file.
 
     npm run tsc
+
+# How to run webpack (bundle up your front end javascript code)
+
+    npm run webpack
+
+# How to run the webserver
+
+    npm run webserver
 
 # NPM tips
 

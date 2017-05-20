@@ -8,6 +8,7 @@ const myUrl = `http://${hostName}:${portNumber}`;
 
 expressApp.set('port', portNumber);
 expressApp.use(express.static('lib/public'));
+expressApp.use(express.static('dist/public'));
 http.createServer(expressApp).listen(
                 portNumber,
                 hostName,
@@ -18,3 +19,7 @@ http.createServer(expressApp).listen(
                     }
                     else console.log(`web server is running at ${myUrl}`);
                 });
+
+expressApp.get('/hello', (httpRequest, httpResponse) => {
+    httpResponse.end("hello");
+});
