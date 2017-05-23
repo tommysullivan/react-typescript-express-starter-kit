@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Row, Column } from "./bootstrap";
 
 interface PersonData {
     firstName:string,
@@ -19,9 +20,14 @@ const mikesFavoritePeople:PersonData[] = [
     }
 ]
 
-export const Site = () => <div>
+const words = ["hi","bye",'hello','goodbye'];
+const siteStyle = {padding: '20px', border: '5px'};
+export const Site = () => <div style={siteStyle}>
     <h1>Mike Chen Resume</h1>
     <h2>Favorite People:</h2>
+    <Row>
+        {words.map(word => <Column columnWidthForMediumScreen={5} ><p>{word}</p></Column>)}
+    </Row>
     <ul>
         {mikesFavoritePeople.map(person => <li key={person.firstName}><Person person={person} /></li>)}
     </ul>

@@ -49,3 +49,45 @@ For development time dependencies (not needed at runtime):
 If you forget the scripts you can run with npm, just use:
 
     npm run
+
+### JSON Hints
+
+primitive data types in JS:
+string
+number
+boolean
+array
+object (key value pairs, where value is also some primitive type)
+
+primitive types not allowed in JSON:
+function
+
+examples:
+
+Numeric value:
+
+    5
+
+Array:
+
+    [
+        "5",
+        7,
+        [
+            "tommy",
+            "is",
+            "fun"
+        ]
+    ]
+
+Object:
+
+    {
+        "propertyA": "valueA",
+        "propertyB": 7,
+        "propertyC": {
+            "name": "Tommy",
+            "age": 29
+        }
+    }
+

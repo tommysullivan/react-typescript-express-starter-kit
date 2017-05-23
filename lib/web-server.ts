@@ -9,9 +9,8 @@ const myUrl = `http://${hostName}:${portNumber}`;
 expressApp.set('port', portNumber);
 expressApp.use(express.static('lib/public'));
 expressApp.use(express.static('dist/public'));
-// expressApp.use(express.static(node_modules/bootstrap/dist/js')); // redirect bootstrap JS
-// expressApp.use(express.static(node_modules/jquery/dist')); // redirect JS jQuery
-// expressApp.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
+expressApp.use(express.static('node_modules'));
+
 http.createServer(expressApp).listen(
                 portNumber,
                 hostName,
