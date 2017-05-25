@@ -23,6 +23,19 @@ const mikesFavoritePeople:PersonData[] = [
 const words = ["hi","bye",'hello','goodbye'];
 const siteStyle = {padding: '20px', border: '5px'};
 export const Site = () => <div style={siteStyle}>
+    <nav className="navbar navbar-inverse">
+        <div className="container-fluid">
+            <div className="navbar-header">
+            <a className="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul className="nav navbar-nav">
+            <li className="active"><a href="#">Home</a></li>
+            <li><a href="#">Page 1</a></li>
+            <li><a href="#">Page 2</a></li>
+            <li><a href="#">Page 3</a></li>
+            </ul>
+        </div>
+    </nav>
     <h1>Mike Chen Resume</h1>
     <h2>Favorite People:</h2>
     <Row>
