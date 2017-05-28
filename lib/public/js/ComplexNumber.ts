@@ -38,7 +38,7 @@ export class ComplexNumber {
         return this.times(new ComplexNumber(-1,0));
     }
 
-    toString():string {
+    toStringTommy():string {
         const operand = this.imaginaryPart < 0 ? '-' : '+';
         const imaginaryPartByItself = `${Math.abs(this.imaginaryPart)}i`;
         return this.realPart==0 
@@ -51,9 +51,9 @@ export class ComplexNumber {
         
     }
 
-    toStringMike():string {
+    toString():string {
         const realPartByItself = this.realPart == 0 && this.imaginaryPart != 0 ? '' : this.realPart;
-        const space = this.imaginaryPart !=0 && this.realPart != 0 ? ' ' : '';
+        const space = this.imaginaryPart != 0 && this.realPart != 0 ? ' ' : '';
         const operand = this.imaginaryPart == 0 || this.realPart == 0 && this.imaginaryPart > 0 ? '' :
             this.imaginaryPart < 0 ? '-' : '+';
         const imaginaryPartByItself = this.imaginaryPart == 0 ? '' :
