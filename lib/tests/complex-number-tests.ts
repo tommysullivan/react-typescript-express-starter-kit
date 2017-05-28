@@ -28,6 +28,24 @@ describe('ComplexNumber', () => {
             });
         });
 
+        context(`when realPart is 5 and imaginaryPart is -1`, () => {
+            it(`should yield 5 - i`, () => {
+                expect(new ComplexNumber(5,-1).toString()).to.equal('5 - i');
+            });
+        });
+
+        context(`when realPart is 0 and imaginaryPart is 1`, () => {
+            it(`should yield i`, () => {
+                expect(new ComplexNumber(0,1).toString()).to.equal('i');
+            });
+        });
+
+        context(`when realPart is 0 and imaginaryPart is -1`, () => {
+            it(`should yield i`, () => {
+                expect(new ComplexNumber(0,-1).toString()).to.equal('-i');
+            });
+        });
+
         context(`when realPart is 5 and imaginaryPart is 2`, () => {
             it(`should yield 5 + 2i`, () => {
                 expect(new ComplexNumber(5,2).toString()).to.equal('5 + 2i');
