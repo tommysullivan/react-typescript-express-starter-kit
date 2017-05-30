@@ -1,17 +1,6 @@
-import { ComplexNumber, ComplexAdditiveIdentity, ComplexMultiplicativeIdentity } from './../public/js/ComplexNumber';
-import 'mocha';
-import * as sinonChai from "sinon-chai";
-import * as chaiOequal from "chai-oequal";
-// import * as sourceMapSupport from "source-map-support";
-import * as chai from 'chai';
+import { ComplexNumber, ComplexAdditiveIdentity, ComplexMultiplicativeIdentity } from '../public/js/ComplexNumber';
 import {expect} from 'chai';
-
-// sourceMapSupport.install();
-
-chai.use(sinonChai);
-chai.use(chaiOequal);
-chai.config.includeStack = true;
-chai.config.showDiff = true;
+import './support';
 
 describe('ComplexNumber', () => {
 
