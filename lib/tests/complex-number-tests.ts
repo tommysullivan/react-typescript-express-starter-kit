@@ -117,4 +117,12 @@ describe('ComplexNumber', () => {
         });
     });
 
+    describe('magnitude', () => {
+        context('when 1+i', () => {
+            it(`should be root 2`, () => {
+                expect(new ComplexNumber(1,1).magnitude).to.equal(Math.sqrt(2));
+            });
+        });
+    });
+
 });

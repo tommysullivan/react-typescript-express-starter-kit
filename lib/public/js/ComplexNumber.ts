@@ -1,4 +1,6 @@
-export class ComplexNumber {
+import {Scalar} from "./scalar";
+
+export class ComplexNumber implements Scalar {
     constructor(public readonly realPart:number, public readonly imaginaryPart:number) {}
 
     plus(other:ComplexNumber):ComplexNumber {
@@ -10,7 +12,7 @@ export class ComplexNumber {
             this.realPart * other.realPart - this.imaginaryPart * other.imaginaryPart,
             this.realPart * other.imaginaryPart + this.imaginaryPart * other.realPart
         );
-    } 
+    }
 
     minus(other:ComplexNumber):ComplexNumber {
         return this.plus(other.additiveInverse);
@@ -20,7 +22,7 @@ export class ComplexNumber {
         return this.times(other.multiplicativeInverse);
     }
 
-    equals(other:ComplexNumber | Number):boolean {
+    equals(other:ComplexNumber | number):boolean {
         const otherAsComplex = other as ComplexNumber;
         console.log(other);
         console.log(typeof(other));
@@ -38,17 +40,13 @@ export class ComplexNumber {
         return this.times(new ComplexNumber(-1,0));
     }
 
-    toStringTommy():string {
-        const operand = this.imaginaryPart < 0 ? '-' : '+';
-        const imaginaryPartByItself = `${Math.abs(this.imaginaryPart)}i`;
-        return this.realPart==0 
-            ? this.imaginaryPart==0 
-                ? '0'
-                : `${this.imaginaryPart.toString()}i`
-            : this.imaginaryPart==0 
-                ? this.realPart.toString()
-                : `${this.realPart} ${operand} ${imaginaryPartByItself}`;
-        
+    get complexConjugate():ComplexNumber {
+        return new ComplexNumber(this.realPart, this.imaginaryPart * -1);
+    }
+
+    get asNumber():number {
+        if(this.imaginaryPart != 0) throw new Error(`${this} cannot be represented as a single real number`);
+        return this.realPart;
     }
 
     toString():string {
@@ -59,6 +57,19 @@ export class ComplexNumber {
         const imaginaryPartByItself = this.imaginaryPart == 0 ? '' :
             Math.abs(this.imaginaryPart) == 1 ? 'i' : `${Math.abs(this.imaginaryPart)}i`;
         return `${realPartByItself}${space}${operand}${space}${imaginaryPartByItself}`;
+    }
+
+    get squared(): Scalar {
+        return this.toThePowerOf(2);
+    }
+
+    toThePowerOf(power: number): Scalar {
+        throw new Error('not implemented');
+    }
+
+    get magnitude():number {
+        // return Math.sqrt(this.realPart * this.realPart + this.imaginaryPart * this.imaginaryPart);
+        return Math.sqrt(this.times(this.complexConjugate).asNumber);
     }
 }
 
