@@ -3,8 +3,8 @@ import { Row, Column } from "./bootstrap";
 
 const siteStyle = {padding: '20px', border: '5px'};
 export const Site = (props:{children:any}) => {
-    const href = window.location.href;
-    const pageName = ['home', 'page1', 'page2', 'page3'];
+    //const href = window.location.href;
+    //const pageName = ['home', 'page1', 'page2', 'page3'];
     return <div style={siteStyle}> 
         <nav className="navbar navbar-inverse">
             <div className="container-fluid">
