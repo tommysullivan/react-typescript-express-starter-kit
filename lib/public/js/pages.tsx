@@ -23,8 +23,12 @@ const mikesFavoritePeople:PersonData[] = [
 
 const words = ["hi","bye",'hello','goodbye'];
 
-export const Page1 = () => <div>
-    <h1>Mike Chen Resume</h1>
+export interface IPageProps {
+    heading:string;
+}
+
+export const Page1 = (props:IPageProps) => <div>
+    <h1>Mike Chen Resume {props.heading}</h1>
     <Row>
         {words.map(word => <Column columnWidthForMediumScreen={5} ><p>{word}</p></Column>)}
     </Row>
@@ -33,5 +37,5 @@ export const Page1 = () => <div>
     </ul>
 </div>
 
-export const Page2 = () => <h1>Page2</h1>
+export const Page2 = () => <h1>Page2<Page1 heading="yo yo yo" /><Page1 heading="myes" /></h1>
 export const Page3 = () => <h1>Page3</h1>
