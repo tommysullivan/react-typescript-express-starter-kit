@@ -21,19 +21,3 @@ export const Site = (props:{children:any}) => {
         {props.children}
     </div>
 }
-
-interface PersonData {
-    firstName:string,
-    lastName:string,
-    favoriteColors:string[]
-}
-export interface PersonProps {
-    person:PersonData
-}
-
-export const Person = (props:PersonProps) => <div>
-    <h4>{props.person.firstName} {props.person.lastName}</h4>
-    <ul>
-        {props.person.favoriteColors.map(color => <li key={color}>{color}</li>)}
-    </ul>
-</div>

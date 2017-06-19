@@ -11,6 +11,8 @@ expressApp.use(express.static('lib/public'));
 expressApp.use(express.static('dist/public'));
 expressApp.use(express.static('node_modules'));
 
+var counter = 1;
+
 http.createServer(expressApp).listen(
                 portNumber,
                 hostName,
@@ -22,6 +24,11 @@ http.createServer(expressApp).listen(
                     else console.log(`web server is running at ${myUrl}`);
                 });
 
-expressApp.get('/hello', (httpRequest, httpResponse) => {
-    httpResponse.end("hello");
+expressApp.get('/counter', (httpRequest, httpResponse) => {
+    httpResponse.end(counter.toString());
+});
+
+expressApp.post('/addToCounter', (httpRequest, httpResponse) => {
+    counter += 1;
+    httpResponse.end(counter.toString());
 });
