@@ -179,20 +179,24 @@ export class BouncyBall extends React.Component <void, {x:number, y:number, vx:n
 export const Page3 = () => <Box/>
 
 //-----Page 4-----//
-// Bouncing ball using canvas
+// Bouncing ball using canvas. Stole this from the internet and React-ified it
+// Source: https://www.burakkanber.com/blog/modeling-physics-javascript-gravity-and-drag/
 const canvasHeight4 = 400;
 const canvasWidth4 = 500;
+var mouse = {x: 0, y: 0, isDown: false};
+var ctx;
 
 var ball = {
-    xpos: 80,
-    ypos: 50,
-    vx: 0,
-    vy: 0,
+    position: {x: canvasWidth4/2, y: 0},
+    velocity: {x: 10, y: 0},
     mass: 0.1, //kg
     radius: 15, // 1px = 1cm
     restitution: -1
 };
-
+var Cd = 0.47;  // Dimensionless
+var rho = .5; // kg / m^3
+var A = Math.PI * ball.radius * ball.radius / (10000); // m^2
+var ag = 9.81;  // m / s^2
 var frameRate = 1/40; // Seconds
 var frameDelay = frameRate * 1000; // ms
 var looptimer;
@@ -206,33 +210,78 @@ function drawCircle(ctx:any, x:number, y:number, radius:number) {
     //ctx.restore();
 }
 
-export class Canvas extends React.Component<void, {x:number, y:number, vx:number, vy:number}> {
-    constructor() {
-        super();
-        this.state = {x: 50, y: 50, vx: 2, vy: 2};
-    }
-
-    updateCanvas() {
-        const ctx = this.refs.canvas.getContext('2d');
-        ctx.clearRect(0,0, canvasWidth4, canvasHeight4);
-        ctx.save();
-        drawCircle(ctx, this.state.x, this.state.y, ball.radius);
-    }
-
-    moveBall() {
-        this.setState({x: this.state.x + this.state.vx, y: this.state.y + this.state.vy});
-        if (this.state.x >= canvasWidth4 - ball.radius || this.state.x - ball.radius <= 0) this.setState({vx: this.state.vx * -1})
-        if (this.state.y >= canvasHeight4 - ball.radius || this.state.y - ball.radius <= 0) this.setState({vy: this.state.vy * -1})
-        this.updateCanvas()
-    }
-
+export class Canvas extends React.Component<void, void> {
     private componentDidMount() {
+        ctx = this.refs.canvas.getContext('2d');
         this.updateCanvas();
         looptimer = setInterval(this.moveBall.bind(this), frameDelay);
     }
-
     private componentWillUnmount() {
         clearInterval(looptimer);
+    }
+    updateCanvas() {
+        ctx.clearRect(0,0, canvasWidth4, canvasHeight4);
+        ctx.save();
+        drawCircle(ctx, ball.position.x, ball.position.y, ball.radius);
+    }
+    getMousePosition(e) {
+        mouse.x = e.pageX - canvas.offsetLeft;
+        mouse.y = e.pageY - canvas.offsetTop;
+    }
+    mouseDown(e) {
+        this.getMousePosition(e);
+        mouse.isDown = true;
+        console.log("grr");
+        ball.position.x = mouse.x;
+        ball.position.y = mouse.y;
+    }
+    mouseUp(e) {
+        mouse.isDown = false;
+        ball.velocity.y = (ball.position.y - mouse.y) / 10;
+        ball.velocity.x = (ball.position.x - mouse.x) / 10;
+    }
+    moveBall() {
+        if (!mouse.isDown) {
+            // Do physics
+                // Drag force: Fd = -1/2 * Cd * A * rho * v * v
+            var Fx = -0.5 * Cd * A * rho * ball.velocity.x * ball.velocity.x * ball.velocity.x / Math.abs(ball.velocity.x);
+            var Fy = -0.5 * Cd * A * rho * ball.velocity.y * ball.velocity.y * ball.velocity.y / Math.abs(ball.velocity.y);
+            
+            Fx = (isNaN(Fx) ? 0 : Fx);
+            Fy = (isNaN(Fy) ? 0 : Fy);
+            
+                // Calculate acceleration ( F = ma )
+            var ax = Fx / ball.mass;
+            var ay = ag + (Fy / ball.mass);
+                // Integrate to get velocity
+            ball.velocity.x += ax*frameRate;
+            ball.velocity.y += ay*frameRate;
+            
+                // Integrate to get position
+            ball.position.x += ball.velocity.x*frameRate*100;
+            ball.position.y += ball.velocity.y*frameRate*100;
+        }
+        // Handle collisions
+        if (ball.position.y > canvasHeight4 - ball.radius) {
+            ball.velocity.y *= ball.restitution;
+            ball.position.y = canvasHeight4 - ball.radius;
+        }
+        if (ball.position.x > canvasWidth4 - ball.radius) {
+            ball.velocity.x *= ball.restitution;
+            ball.position.x = canvasWidth4 - ball.radius;
+        }
+        if (ball.position.x < ball.radius) {
+            ball.velocity.x *= ball.restitution;
+            ball.position.x = ball.radius;
+        }
+        this.updateCanvas()
+        if (mouse.isDown) {
+            ctx.beginPath();
+            ctx.moveTo(ball.position.x, ball.position.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.stroke();
+            ctx.closePath();
+        }
     }
     
     render () {
@@ -241,7 +290,15 @@ export class Canvas extends React.Component<void, {x:number, y:number, vx:number
             margin: "20px auto",
             border: "1px solid #666"
         };
-        return <canvas ref="canvas" height={canvasHeight4} width={canvasWidth4} style={canvasStyle}>
+        return <canvas
+            id="canvas"
+            ref="canvas"
+            height={canvasHeight4}
+            width={canvasWidth4}
+            style={canvasStyle}
+            onMouseMove={this.getMousePosition.bind(this)}
+            onMouseDown={this.mouseDown.bind(this)}
+            onMouseUp={this.mouseUp.bind(this)}>
         </canvas>
     }
 }
