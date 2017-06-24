@@ -15,6 +15,8 @@ export const Site = (props:{children:any}) => {
                     <li className={path=='#/page1' ? 'active' : ''}><a href="#/page1">Page 1</a></li>
                     <li className={path=='#/page2' ? 'active' : ''}><a href="#/page2">Page 2</a></li>
                     <li className={path=='#/page3' ? 'active' : ''}><a href="#/page3">Page 3</a></li>
+                    <li className={path=='#/page4' ? 'active' : ''}><a href="#/page4">Page 4</a></li>
+                    <li className={path=='#/page5' ? 'active' : ''}><a href="#/page5">Page 5</a></li>
                 </ul>
             </div>
         </nav>
