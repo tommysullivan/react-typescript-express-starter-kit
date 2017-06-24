@@ -2,8 +2,6 @@ import * as React from "react";
 import { Row, Column } from "./bootstrap";
 import * as ReactDOM from "@types/react-dom";
 import { getCounterValue, updateCounter } from "../../elasticsearch";
-import * as Konva from "konva";
-import {Layer, Circle, Stage, Group} from "react-konva";
 
 //-----Page 1-----//
 // Some static content
@@ -119,8 +117,10 @@ export class Page2 extends React.Component<void, {counter?:number}> {
 
 //-----Page 3-----//
 //Bouncing square using DOM
-const canvasHeight3 = 400;
-const canvasWidth3 = 500;
+const boxHeight = 400;
+const boxWidth = 500;
+const bouncyBoxWidth = 40;
+const bouncyBoxHeight = 40;
 
 export class Box extends React.Component {
     render () {      
@@ -128,45 +128,35 @@ export class Box extends React.Component {
             display: "block",
             margin: "20px auto",
             border: "1px solid #666",
-            height: `${canvasHeight3}px`,
-            width: `${canvasWidth3}px`
+            height: `${boxHeight}px`,
+            width: `${boxWidth}px`
         };
         return <div style={canvasStyle}>
-            <BouncyBall/>
+            <BouncyBox/>
         </div>
     }
 }
 
-var frameRate = 1/40; // Seconds
-var frameDelay = frameRate * 1000; // ms
-var ballWidth = 40;
-var ballHeight = 40;
-var looptimer;
-
-export class BouncyBall extends React.Component <void, {x:number, y:number, vx:number, vy:number}> {
+export class BouncyBox extends React.Component <void, {x:number, y:number, vx:number, vy:number}> {
     constructor() {
         super();
         this.state = {x: 50, y: 50, vx: 2, vy: 2};
     }
-
     moveBall() {
         this.setState({x: this.state.x + this.state.vx, y: this.state.y + this.state.vy});
-        if (this.state.x >= canvasWidth3 - ballWidth || this.state.x <= 0) this.setState({vx: this.state.vx * -1})
-        if (this.state.y >= canvasHeight3 - ballHeight || this.state.y <= 0) this.setState({vy: this.state.vy * -1})
+        if (this.state.x >= boxWidth - bouncyBoxWidth || this.state.x <= 0) this.setState({vx: this.state.vx * -1})
+        if (this.state.y >= boxHeight - bouncyBoxHeight || this.state.y <= 0) this.setState({vy: this.state.vy * -1})
     }
-
     private componentDidMount() {
-        looptimer = setInterval(this.moveBall.bind(this), frameDelay);
+        const looptimer = setInterval(this.moveBall.bind(this), 25);
     }
-
     private componentWillUnmount() {
         clearInterval(looptimer);
     }
-
     render() {
         const ballStyle = {
-            width: `${ballWidth}px`,
-            height: `${ballHeight}px`,
+            width: `${bouncyBoxWidth}px`,
+            height: `${bouncyBoxHeight}px`,
             backgroundColor: "blue",
             position: "relative",
             top: `${this.state.y}px`,
@@ -194,7 +184,7 @@ var ball = {
     restitution: -1
 };
 var Cd = 0.47;  // Dimensionless
-var rho = .5; // kg / m^3
+var rho = 0;//.5; // kg / m^3
 var A = Math.PI * ball.radius * ball.radius / (10000); // m^2
 var ag = 9.81;  // m / s^2
 var frameRate = 1/40; // Seconds
@@ -231,7 +221,6 @@ export class Canvas extends React.Component<void, void> {
     mouseDown(e) {
         this.getMousePosition(e);
         mouse.isDown = true;
-        console.log("grr");
         ball.position.x = mouse.x;
         ball.position.y = mouse.y;
     }
@@ -306,66 +295,5 @@ export class Canvas extends React.Component<void, void> {
 export const Page4 = () => <Canvas>Browser does not support canvas.</Canvas>
 
 //-----Page 5-----//
-// Using konva library for a bit of interactivity still can't figure out how to set state to object's dragged location
-export class Planet extends React.Component<void, {isMouseInside:boolean, color:any, x:number, y:number, vx:number, vy:number}> {
-    constructor(...args) {
-      super(...args);
-      this.state = {
-         isMouseInside: false,
-         color: Konva.Util.getRandomColor(),
-         x:50,
-         y:50,
-         vx:2,
-         vy:2
-      };
-      this.handleMouseEnter = this.handleMouseEnter.bind(this);
-      this.handleMouseLeave = this.handleMouseLeave.bind(this);
-    }
-    handleMouseEnter() {
-      this.setState({
-        isMouseInside: true
-      });
-    }
-    handleMouseLeave() {
-      this.setState({
-        isMouseInside: false
-      });
-    }
-    handleOnClick() {
-        this.setState({
-            color: Konva.Util.getRandomColor()
-        })
-    }
-
-    render() {
-        return (
-            <Circle
-                x={this.state.x} y={this.state.y} radius={50}
-                fill={this.state.color}
-                stroke="black"
-                strokeWidth={this.state.isMouseInside ? 5 : 1}
-                onMouseEnter={this.handleMouseEnter}
-                onMouseLeave={this.handleMouseLeave}
-                onClick={this.handleOnClick.bind(this)}
-                //onDragEnd={this.onDragEnd.bind(this)}
-                draggable="true"
-            />
-        );
-    }
-} 
-
-export class Universe extends React.Component<void, void> {
-    render() {
-        return (
-            <div color="black">
-        <Stage width={700} height={700}>
-            <Layer>
-                <Planet/>
-            </Layer>
-        </Stage>
-        </div>
-        );
-    }
-}
-
-export const Page5 = () => <Universe/>
+//blank
+export const Page5 = () => <div/>
