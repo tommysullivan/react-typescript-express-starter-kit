@@ -1,6 +1,7 @@
 //EVERYTHING HERE IS CURRENTLY CONFIGURED FOR WINDOWS :(
 import { createIndexAndStuff } from "./elasticsearch";
 
+const exec = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
@@ -12,7 +13,7 @@ const elasticsearchYmlAddition = 'http.cors.enabled: true \nhttp.cors.allow-orig
 
 setupElasticSearch(elasticsearchLink, destinationDirectory);
 
-// If necessary: acquire elasticsearch, starts server, and configures database if necessary
+// Download and unzip elasticsearch if needed, starts server (always), and configures database if needed
 async function setupElasticSearch(downloadLink:string, unzipDestination:string) {
     const downloadFileName = downloadLink.substr((downloadLink.lastIndexOf('/') + 1));
     const downloadFileNameWithoutExtension = downloadFileName.substr(0, downloadFileName.lastIndexOf('.'));
@@ -35,7 +36,6 @@ async function setupElasticSearch(downloadLink:string, unzipDestination:string) 
         fs.appendFileSync(ymlFileLocation, elasticsearchYmlAddition);
     }
 
-    const { exec } = require('child_process');
     const batFileLocation = destinationDirectory + downloadFileNameWithoutExtension + slash + 'bin' + slash + 'elasticsearch.bat';
     exec(batFileLocation, (err, stdout, stderr) => {
         if (err) {
