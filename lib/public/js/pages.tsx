@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Row, Column } from "./bootstrap";
 import * as ReactDOM from "@types/react-dom";
-import { getCounterValue, updateCounter } from "../../elasticsearch";
+import { getCounterValue, updateCounter } from "../../elasticsearch/elasticsearch";
 
 //-----Page 1-----//
 // Some static content
@@ -184,7 +184,7 @@ var ball = {
     restitution: -1
 };
 var Cd = 0.47;  // Dimensionless
-var rho = 0;//.5; // kg / m^3
+var rho = .1;//.5; // kg / m^3
 var A = Math.PI * ball.radius * ball.radius / (10000); // m^2
 var ag = 9.81;  // m / s^2
 var frameRate = 1/40; // Seconds
@@ -285,7 +285,7 @@ export class Canvas extends React.Component<void, void> {
             height={canvasHeight4}
             width={canvasWidth4}
             style={canvasStyle}
-            onMouseMove={this.getMousePosition.bind(this)}
+            onMouseMove={e => this.getMousePosition(e)}
             onMouseDown={this.mouseDown.bind(this)}
             onMouseUp={this.mouseUp.bind(this)}>
         </canvas>

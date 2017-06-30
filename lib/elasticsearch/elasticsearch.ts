@@ -6,11 +6,35 @@ export const elasticClient = new elasticsearch.Client({
     requestTimeout: 30000
 });
 
+export async function createIndexAndStuff() {
+    elasticClient.indices.create( {
+        index: 'counter'
+    }, (err, resp, status) => {
+        if(err) {
+            console.log(err);
+        }
+        else {
+            console.log("create", resp);
+        }
+    });
+
+    elasticClient.index({
+        index: 'counter',
+        id: '1',
+        type: '1.0.0',
+        body: {
+            counter: 0
+        }
+    }, (err, resp, status) => {
+            console.log(resp);
+    });
+}
+
 export async function updateCounter(currentValue:number, increment:number) {
     await elasticClient.index({
         index: 'counter',
         type: '1.0.0',
-        id: 'grrr',
+        id: '1',
         body: {
             counter: currentValue + increment
         }
@@ -21,9 +45,8 @@ export async function getCounterValue() {
     const test = await elasticClient.get({
         index: 'counter',
         type: '1.0.0',
-        id: 'grrr'
+        id: '1'
     });
-    //console.log(test._source['counter']);
     return test._source['counter'];
 }
 
