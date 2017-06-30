@@ -7,7 +7,7 @@
     "test": "mocha -u bdd-lazy-var/getter -r ts-node/register lib/tests/**/*.ts",
     "tsc": "tsc --watch",
     "webserver": "nodemon dist/web-server.js",
-    "dbserver": "node dist/elasticsearch/start-es-server.js",
+    "dbserver": "node dist/elasticsearch/elasticsearch-setup.js",
     "webpack": "webpack --watch",
     "dev": "lib/dev-environment.sh"
   },

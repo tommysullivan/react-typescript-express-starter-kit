@@ -1,43 +1,50 @@
+//EVERYTHING HERE IS CURRENTLY CONFIGURED FOR WINDOWS :(
 import { createIndexAndStuff } from "./elasticsearch";
 
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const extract = require('extract-zip');
-const slash = '\\'; // because i think windows is the only one that uses this backslash?
+const slash = '\\';
 const destinationDirectory = __dirname + slash;
 const elasticsearchLink = "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.4.3.zip";
 const elasticsearchYmlAddition = 'http.cors.enabled: true \nhttp.cors.allow-origin: "*"';
 
 setupElasticSearch(elasticsearchLink, destinationDirectory);
 
-// If necessary, creates downloads folder to put elasticsearch and unzips it.
-// Then starts server and configures database if necessary (not written yet)
+// If necessary: acquire elasticsearch, starts server, and configures database if necessary
 async function setupElasticSearch(downloadLink:string, unzipDestination:string) {
     const downloadFileName = downloadLink.substr((downloadLink.lastIndexOf('/') + 1));
     const downloadFileNameWithoutExtension = downloadFileName.substr(0, downloadFileName.lastIndexOf('.'));
 
-    try { //change to if later
-        fs.statSync(destinationDirectory + downloadFileNameWithoutExtension);
-        console.log(`${unzipDestination + downloadFileNameWithoutExtension} already exists.`)
+    if (fs.existsSync(destinationDirectory + downloadFileNameWithoutExtension)) {
+        console.log(`${unzipDestination + downloadFileNameWithoutExtension} already exists.`);
     }
-    catch(e) {
-        await promiseDownloadFile(elasticsearchLink, destinationDirectory)
+    else {
+        await promiseDownloadFile(elasticsearchLink, destinationDirectory);
         await unzipFile(destinationDirectory + downloadFileName, destinationDirectory);
         await deleteFile(destinationDirectory + downloadFileName);
     }
 
     // modify elasticsearch.yml to allow connections
     const ymlFileLocation = destinationDirectory + downloadFileNameWithoutExtension + slash + 'config' + slash + 'elasticsearch.yml';
-    console.log(ymlFileLocation);
-    if(fs.readFileSync(ymlFileLocation).indexOf(elasticsearchYmlAddition) >= 0) {
+    if (fs.readFileSync(ymlFileLocation).indexOf(elasticsearchYmlAddition) >= 0) {
         console.log("elasticsearch.yml is properly configured i guess.");
     }
     else {
         fs.appendFileSync(ymlFileLocation, elasticsearchYmlAddition);
     }
 
-    createIndexAndStuff();
+    const { exec } = require('child_process');
+    const batFileLocation = destinationDirectory + downloadFileNameWithoutExtension + slash + 'bin' + slash + 'elasticsearch.bat';
+    exec(batFileLocation, (err, stdout, stderr) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        console.log(stdout);
+    });
+    setTimeout(createIndexAndStuff,15000); // should find a better way to do this
 }
 
 function promiseDownloadFile(downloadLink:string, dest:string) {

@@ -7,26 +7,34 @@ export const elasticClient = new elasticsearch.Client({
 });
 
 export async function createIndexAndStuff() {
-    elasticClient.indices.create( {
-        index: 'counter'
-    }, (err, resp, status) => {
-        if(err) {
-            console.log(err);
-        }
-        else {
-            console.log("create", resp);
-        }
-    });
+    elasticClient.exists({
+    index: 'counter',
+    type: '1.0.0',
+    id: '1'
+    }, function (error, exists) {
+        if (exists === false) {
+            elasticClient.indices.create( {
+                index: 'counter'
+            }, (err, resp, status) => {
+                if(err) {
+                    console.log(err);
+                }
+                else {
+                    console.log("create", resp);
+                }
+            });
 
-    elasticClient.index({
-        index: 'counter',
-        id: '1',
-        type: '1.0.0',
-        body: {
-            counter: 0
+            elasticClient.index({
+                index: 'counter',
+                id: '1',
+                type: '1.0.0',
+                body: {
+                    counter: 0
+                }
+            }, (err, resp, status) => {
+                console.log(resp);
+            });
         }
-    }, (err, resp, status) => {
-            console.log(resp);
     });
 }
 
