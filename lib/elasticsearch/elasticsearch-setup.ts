@@ -1,4 +1,4 @@
-//EVERYTHING HERE IS CURRENTLY CONFIGURED FOR WINDOWS :(
+// EVERYTHING HERE IS CURRENTLY CONFIGURED FOR WINDOWS :(
 import { createIndexAndStuff } from "./elasticsearch";
 
 const exec = require('child_process');
@@ -27,7 +27,7 @@ async function setupElasticSearch(downloadLink:string, unzipDestination:string) 
         await deleteFile(destinationDirectory + downloadFileName);
     }
 
-    // modify elasticsearch.yml to allow connections
+    // Modify elasticsearch.yml to allow connections
     const ymlFileLocation = destinationDirectory + downloadFileNameWithoutExtension + slash + 'config' + slash + 'elasticsearch.yml';
     if (fs.readFileSync(ymlFileLocation).indexOf(elasticsearchYmlAddition) >= 0) {
         console.log("elasticsearch.yml is properly configured i guess.");

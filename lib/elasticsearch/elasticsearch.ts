@@ -8,9 +8,9 @@ export const elasticClient = new elasticsearch.Client({
 
 export async function createIndexAndStuff() {
     elasticClient.exists({
-    index: 'counter',
-    type: '1.0.0',
-    id: '1'
+        index: 'counter',
+        type: '1.0.0',
+        id: '1'
     }, function (error, exists) {
         if (exists === false) {
             elasticClient.indices.create( {

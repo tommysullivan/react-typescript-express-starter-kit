@@ -124,14 +124,14 @@ const bouncyBoxHeight = 40;
 
 export class Box extends React.Component {
     render () {      
-        const canvasStyle = {
+        const divStyle = {
             display: "block",
             margin: "20px auto",
             border: "1px solid #666",
             height: `${boxHeight}px`,
             width: `${boxWidth}px`
         };
-        return <div style={canvasStyle}>
+        return <div style={divStyle}>
             <BouncyBox/>
         </div>
     }
@@ -141,6 +141,7 @@ export class BouncyBox extends React.Component <void, {x:number, y:number, vx:nu
     constructor() {
         super();
         this.state = {x: 50, y: 50, vx: 2, vy: 2};
+        var looptimer;
     }
     moveBall() {
         this.setState({x: this.state.x + this.state.vx, y: this.state.y + this.state.vy});
@@ -148,7 +149,7 @@ export class BouncyBox extends React.Component <void, {x:number, y:number, vx:nu
         if (this.state.y >= boxHeight - bouncyBoxHeight || this.state.y <= 0) this.setState({vy: this.state.vy * -1})
     }
     private componentDidMount() {
-        const looptimer = setInterval(this.moveBall.bind(this), 25);
+        looptimer = setInterval(this.moveBall.bind(this), 25);
     }
     private componentWillUnmount() {
         clearInterval(looptimer);
@@ -171,33 +172,30 @@ export const Page3 = () => <Box/>
 //-----Page 4-----//
 // Bouncing ball using canvas. Stole this from the internet and React-ified it
 // Source: https://www.burakkanber.com/blog/modeling-physics-javascript-gravity-and-drag/
-const canvasHeight4 = 400;
-const canvasWidth4 = 500;
 var mouse = {x: 0, y: 0, isDown: false};
+var looptimer;
 var ctx;
-
 var ball = {
-    position: {x: canvasWidth4/2, y: 0},
+    position: {x: canvasWidth/2, y: 0},
     velocity: {x: 10, y: 0},
     mass: 0.1, //kg
     radius: 15, // 1px = 1cm
     restitution: -1
 };
-var Cd = 0.47;  // Dimensionless
-var rho = .1;//.5; // kg / m^3
-var A = Math.PI * ball.radius * ball.radius / (10000); // m^2
-var ag = 9.81;  // m / s^2
-var frameRate = 1/40; // Seconds
-var frameDelay = frameRate * 1000; // ms
-var looptimer;
+const canvasHeight = 400;
+const canvasWidth = 500;
+const Cd = 0.47;  // Dimensionless
+const rho = .1;//.5; // kg / m^3
+const A = Math.PI * ball.radius * ball.radius / (10000); // m^2
+const ag = 9.81;  // m / s^2
+const frameRate = 1/40; // Seconds
+const frameDelay = frameRate * 1000; // ms
 
 function drawCircle(ctx:any, x:number, y:number, radius:number) {
-    //ctx.translate(x, y);
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI*2, true);
     ctx.fill();
     ctx.closePath();
-    //ctx.restore();
 }
 
 export class Canvas extends React.Component<void, void> {
@@ -210,7 +208,7 @@ export class Canvas extends React.Component<void, void> {
         clearInterval(looptimer);
     }
     updateCanvas() {
-        ctx.clearRect(0,0, canvasWidth4, canvasHeight4);
+        ctx.clearRect(0,0, canvasWidth, canvasHeight);
         ctx.save();
         drawCircle(ctx, ball.position.x, ball.position.y, ball.radius);
     }
@@ -232,32 +230,32 @@ export class Canvas extends React.Component<void, void> {
     moveBall() {
         if (!mouse.isDown) {
             // Do physics
-                // Drag force: Fd = -1/2 * Cd * A * rho * v * v
+            // Drag force: Fd = -1/2 * Cd * A * rho * v * v
             var Fx = -0.5 * Cd * A * rho * ball.velocity.x * ball.velocity.x * ball.velocity.x / Math.abs(ball.velocity.x);
             var Fy = -0.5 * Cd * A * rho * ball.velocity.y * ball.velocity.y * ball.velocity.y / Math.abs(ball.velocity.y);
             
             Fx = (isNaN(Fx) ? 0 : Fx);
             Fy = (isNaN(Fy) ? 0 : Fy);
             
-                // Calculate acceleration ( F = ma )
+            // Calculate acceleration ( F = ma )
             var ax = Fx / ball.mass;
             var ay = ag + (Fy / ball.mass);
                 // Integrate to get velocity
             ball.velocity.x += ax*frameRate;
             ball.velocity.y += ay*frameRate;
             
-                // Integrate to get position
+            // Integrate to get position
             ball.position.x += ball.velocity.x*frameRate*100;
             ball.position.y += ball.velocity.y*frameRate*100;
         }
         // Handle collisions
-        if (ball.position.y > canvasHeight4 - ball.radius) {
+        if (ball.position.y > canvasHeight - ball.radius) {
             ball.velocity.y *= ball.restitution;
-            ball.position.y = canvasHeight4 - ball.radius;
+            ball.position.y = canvasHeight - ball.radius;
         }
-        if (ball.position.x > canvasWidth4 - ball.radius) {
+        if (ball.position.x > canvasWidth - ball.radius) {
             ball.velocity.x *= ball.restitution;
-            ball.position.x = canvasWidth4 - ball.radius;
+            ball.position.x = canvasWidth - ball.radius;
         }
         if (ball.position.x < ball.radius) {
             ball.velocity.x *= ball.restitution;
@@ -282,8 +280,8 @@ export class Canvas extends React.Component<void, void> {
         return <canvas
             id="canvas"
             ref="canvas"
-            height={canvasHeight4}
-            width={canvasWidth4}
+            height={canvasHeight}
+            width={canvasWidth}
             style={canvasStyle}
             onMouseMove={e => this.getMousePosition(e)}
             onMouseDown={this.mouseDown.bind(this)}
