@@ -1,12 +1,13 @@
 // EVERYTHING HERE IS CURRENTLY CONFIGURED FOR WINDOWS :(
 import { createIndexAndStuff } from "./elasticsearch";
 
-const exec = require('child_process');
+const childProcess = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const extract = require('extract-zip');
-const slash = '\\';
+const slash = path.sep;
+const windowsOperatingSystem = slash === '\\' ? true : false;
 const destinationDirectory = __dirname + slash;
 const elasticsearchLink = "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.4.3.zip";
 const elasticsearchYmlAddition = 'http.cors.enabled: true \nhttp.cors.allow-origin: "*"';
@@ -37,13 +38,24 @@ async function setupElasticSearch(downloadLink:string, unzipDestination:string) 
     }
 
     const batFileLocation = destinationDirectory + downloadFileNameWithoutExtension + slash + 'bin' + slash + 'elasticsearch.bat';
-    exec(batFileLocation, (err, stdout, stderr) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        console.log(stdout);
-    });
+    if (windowsOperatingSystem) {
+        childProcess(batFileLocation, (err, stdout, stderr) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(stdout);
+        });
+    }
+    else {
+        childProcess.exec(`${destinationDirectory + downloadFileNameWithoutExtension}/bin/elasticsearch`, (err, stdout, stderr) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            console.log(stdout);
+        });
+    }
     setTimeout(createIndexAndStuff,15000); // should find a better way to do this
 }
 
