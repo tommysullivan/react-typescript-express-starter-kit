@@ -23,7 +23,7 @@ async function setupElasticSearch(downloadLink:string, unzipDestination:string) 
         console.log(`${unzipDestination + downloadFileNameWithoutExtension} already exists.`);
     }
     else {
-        await promiseDownloadFile(elasticsearchLink, destinationDirectory);
+        await downloadFile(elasticsearchLink, destinationDirectory);
         await unzipFile(destinationDirectory + downloadFileName, destinationDirectory);
         await deleteFile(destinationDirectory + downloadFileName);
     }
@@ -59,7 +59,7 @@ async function setupElasticSearch(downloadLink:string, unzipDestination:string) 
     setTimeout(createIndexAndStuff,15000); // should find a better way to do this
 }
 
-function promiseDownloadFile(downloadLink:string, dest:string) {
+function downloadFile(downloadLink:string, dest:string) {
     return new Promise((resolve, reject) => {
         const fileName = downloadLink.substr(downloadLink.lastIndexOf('/') + 1);
         if (!fs.existsSync(dest + fileName)) {
