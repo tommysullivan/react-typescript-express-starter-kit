@@ -1,8 +1,17 @@
+/*const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+	res.send('HEY!');
+});
+
+app.listen(3000, () => console.log('Server running on port 3000'));
+*/
 import * as express from "express";
 import * as http from "http";
 
 const expressApp = express();
-const portNumber = 5000;
+const portNumber = 3000;
 const hostName = 'localhost';
 const myUrl = `http://${hostName}:${portNumber}`;
 
@@ -16,7 +25,7 @@ var counter = 1;
 
 http.createServer(expressApp).listen(
     portNumber,
-    hostName,
+    //hostName,
     (error:any) => {
         if(error) {
             console.log(error);

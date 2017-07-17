@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha -u bdd-lazy-var/getter -r ts-node/register lib/tests/**/*.ts",
     "tsc": "tsc --watch",
-    "webserver": "nodemon dist/web-server.js",
+    "webserver": "pm2 start dist/web-server.js",
     "dbserver": "node dist/elasticsearch/elasticsearch-setup.js",
     "webpack": "webpack --watch",
     "dev": "lib/dev-environment.sh"
