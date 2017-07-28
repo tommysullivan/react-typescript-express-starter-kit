@@ -8,15 +8,15 @@ export const Site = (props:{children:any}) => {
         <nav className="navbar navbar-inverse">
             <div className="container-fluid">
                 <div className="navbar-header">
-                    <a className="navbar-brand" href="#">WebSiteName</a>
+                    <a className="navbar-brand" href="#">Home</a>
                 </div>
                 <ul className="nav navbar-nav">
-                    <li className={path=='#/' ? 'active' : ''}><a href="#">Home</a></li>
-                    <li className={path=='#/page1' ? 'active' : ''}><a href="#/page1">Page 1</a></li>
-                    <li className={path=='#/page2' ? 'active' : ''}><a href="#/page2">Page 2</a></li>
-                    <li className={path=='#/page3' ? 'active' : ''}><a href="#/page3">Page 3</a></li>
-                    <li className={path=='#/page4' ? 'active' : ''}><a href="#/page4">Page 4</a></li>
-                    <li className={path=='#/page5' ? 'active' : ''}><a href="#/page5">Page 5</a></li>
+                    {/* <li className={path=='#/' ? 'active' : ''}><a href="#">Home</a></li>  */}
+                    <li className={path=='#/AboutMe' ? 'active' : ''}><a href="#/AboutMe">About Me</a></li> 
+                    <li className={path=='#/page2' ? 'active' : ''}><a href="#/page2">Counter</a></li>
+                    <li className={path=='#/page3' ? 'active' : ''}><a href="#/page3">Bouncing Box</a></li>
+                    <li className={path=='#/page4' ? 'active' : ''}><a href="#/page4">Bouncy Ball</a></li>
+                    <li className={path=='#/page5' ? 'active' : ''}><a href="#/page5">Empty</a></li>
                 </ul>
             </div>
         </nav>
