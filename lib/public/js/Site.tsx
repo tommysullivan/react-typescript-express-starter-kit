@@ -8,7 +8,7 @@ export const Site = (props:{children:any}) => {
         <nav className="navbar navbar-inverse">
             <div className="container-fluid">
                 <div className="navbar-header">
-                    <a className="navbar-brand" href="#">WebSiteNameee</a>
+                    <a className="navbar-brand" href="#">WebSiteName</a>
                 </div>
                 <ul className="nav navbar-nav">
                     <li className={path=='#/' ? 'active' : ''}><a href="#">Home</a></li>
