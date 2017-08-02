@@ -1,3 +1,5 @@
 # bobbins-website
 
-Skeleton of website to be run on AWS.
+Skeleton of website running on AWS.
+
+URL is private for now.
